@@ -1,0 +1,14 @@
+# Backend
+fm_backend/venv/
+fm_backend/__pycache__/
+fm_backend/*.pyc
+fm_backend/db.sqlite3
+fm_backend/.env
+
+# Frontend
+fm_frontend/node_modules/
+fm_frontend/dist/
+fm_frontend/.env
+
+# General
+.env
