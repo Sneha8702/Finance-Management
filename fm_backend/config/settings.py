@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i8*m)&9z4zmqu#v%rtz5ub*5l@i$ckpvm7kmz@5glu3sj&u)kl'
 DEBUG = True
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['192.168.1.7', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.31', 'localhost', '127.0.0.1']
 
 # Applications
 INSTALLED_APPS = [
@@ -43,9 +43,10 @@ MIDDLEWARE = [
 
 # CORS (for React frontend)
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174",
-]
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5174",
+# ]
 
 # URLs & Templates
 ROOT_URLCONF = 'config.urls'
@@ -98,7 +99,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
 }
 
