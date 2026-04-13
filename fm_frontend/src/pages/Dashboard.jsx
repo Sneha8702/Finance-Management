@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../services/api";
+import { logoutUser, getUserDetails } from "../services/api";
 import AddExpenseModal from "../components/AddExpenseModal";
 import MobileLayout from "../components/layout/MobileLayout";
 
@@ -28,7 +28,20 @@ function Dashboard() {
     if (!access) {
       navigate("/");
     } else {
-      setUsername(localStorage.getItem("username") || "User");
+      // 🔄 Fetch real user details
+      getUserDetails()
+        .then((data) => {
+          if (data && data.username) {
+            setUsername(data.username);
+            // Optionally sync to localStorage for persistence
+            localStorage.setItem("username", data.username);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user details:", err);
+          // Fallback to localStorage if API fails
+          setUsername(localStorage.getItem("username") || "User");
+        });
     }
   }, [navigate]);
 
@@ -38,13 +51,13 @@ function Dashboard() {
   const renderTabContent = () => {
     switch (activeTab) {
       case "home":
-        return <HomeTab />;
+        return <HomeTab username={username} />;
       case "stats":
         return <StatsTab />;
       case "expenses":
         return <ExpensesTab key={refreshKey} />;
       case "profile":
-        return <ProfileTab />;
+        return <ProfileTab username={username} />;
       default:
         return <ExpensesTab key={refreshKey} />;
     }

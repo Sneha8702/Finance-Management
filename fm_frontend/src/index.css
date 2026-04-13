@@ -313,3 +313,17 @@ body {
     opacity: 1;
   }
 }
+
+/* 📱 Responsive Add Expense Modal Form Grid */
+.expense-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 480px) {
+  .expense-form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

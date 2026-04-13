@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 
-function ProfileTab() {
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
-    setUsername(localStorage.getItem("username") || "User");
-  }, []);
-
+function ProfileTab({ username = "User" }) {
   const handleDeleteAccount = () => {
     // Placeholder for future functionality
     alert("Delete Account functionality is coming soon!");

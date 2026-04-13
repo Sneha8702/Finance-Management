@@ -130,7 +130,7 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
         <form className="auth-form" onSubmit={handleAddExpense}>
           {error && <div className="error-message">⚠️ {error}</div>}
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+          <div className="expense-form-grid">
             <div className="form-group">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
                 <label className="form-label" style={{ margin: 0 }}>Amount</label>

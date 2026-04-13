@@ -60,17 +60,14 @@ API.interceptors.response.use(
 
 // ---------------- LOGIN ----------------
 export const loginUser = async (data) => {
-  const response = await API.post("/login/", data);
+  const response = await API.post("/api/token/", data);
 
-  if (response.data?.tokens) {
-    localStorage.setItem("access", response.data.tokens.access);
-    localStorage.setItem("refresh", response.data.tokens.refresh);
-    localStorage.setItem("username", response.data.user.username);
-  }
+  // ✅ Save tokens
+  localStorage.setItem("access", response.data.access);
+  localStorage.setItem("refresh", response.data.refresh);
 
   return response.data;
 };
-
 // ---------------- SIGNUP ----------------
 export const signupUser = async (data) => {
   const response = await API.post("/signup/", data);
@@ -111,6 +108,18 @@ export const getCategories = async () => {
 // ---------------- GET EXPENSES ----------------
 export const getExpenses = async (params = {}) => {
   const response = await API.get("/show-expenses/", { params });
+  return response.data;
+};
+
+// ---------------- GET USER DETAILS ----------------
+export const getUserDetails = async () => {
+  const response = await API.get("/user-details/");
+  return response.data;
+};
+
+// ---------------- GET EXPENSE OVERVIEW ----------------
+export const getExpenseOverview = async () => {
+  const response = await API.get("/expense-overview/");
   return response.data;
 };
 
