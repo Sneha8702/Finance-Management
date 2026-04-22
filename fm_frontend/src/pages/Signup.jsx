@@ -44,7 +44,7 @@ function Signup() {
 
   return (
     <div className="auth-page">
-      <div className="glass-card">
+      <div className="glass-card auth-card">
         <div className="brand-section">
           <span className="brand-logo">FM</span>
           <h2 className="auth-title">Create Account</h2>

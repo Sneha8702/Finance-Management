@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useTheme } from "../context/ThemeContext";
 import { addExpense, getCategories } from "../services/api";
 import Calculator from "./common/Calculator";
 
 function AddExpenseModal({ show, onClose, onSuccess }) {
+  const { theme } = useTheme();
   const [expense, setExpense] = useState({
     amount: "",
     category_id: "",
@@ -85,9 +87,9 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
         style={{ 
           maxWidth: "450px", 
           padding: "32px",
-          background: "rgba(15, 23, 42, 0.9)",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
-          boxShadow: "0 24px 64px -12px rgba(0, 0, 0, 0.8)",
+          background: "var(--glass-bg)",
+          border: "1px solid var(--glass-border)",
+          boxShadow: theme === "dark" ? "0 24px 64px -12px rgba(0, 0, 0, 0.8)" : "var(--shadow)",
           animation: "slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
           position: "relative"
         }}
@@ -117,7 +119,7 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
             fontSize: "28px", 
             fontWeight: "700", 
             marginBottom: "8px", 
-            color: "#fff",
+            color: "var(--text-main)",
             letterSpacing: "-0.5px"
           }}>
             New Transaction
@@ -161,7 +163,7 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
                 value={expense.amount}
                 onChange={handleExpenseChange}
                 required
-                style={{ background: "#1e293b", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "12px" }}
+                style={{ background: "var(--input-bg)", border: "1px solid var(--glass-border)", borderRadius: "12px", color: "var(--text-main)" }}
               />
             </div>
 
@@ -178,22 +180,22 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
                   style={{
                     appearance: "none",
                     cursor: "pointer",
-                    background: "#1e293b",
-                    color: "#fff",
-                    border: "1px solid rgba(255,255,255,0.05)",
+                    background: "var(--input-bg)",
+                    color: "var(--text-main)",
+                    border: "1px solid var(--glass-border)",
                     borderRadius: "12px",
                     width: "100%",
                     paddingRight: "40px"
                   }}
                 >
-                  <option value="" style={{ background: "#1a1a1a" }}>
+                  <option value="" style={{ background: "var(--bg-dark)" }}>
                     {loadingCategories ? "Loading..." : "Select Category"}
                   </option>
                   {categories.map((cat) => (
                     <option
                       key={cat.id}
                       value={cat.id}
-                      style={{ background: "#1a1a1a" }}
+                      style={{ background: "var(--bg-dark)" }}
                     >
                       {cat.name}
                     </option>
@@ -223,10 +225,11 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
               onChange={handleExpenseChange}
               required
               style={{ 
-                background: "#1e293b", 
-                border: "1px solid rgba(255,255,255,0.05)", 
+                background: "var(--input-bg)", 
+                border: "1px solid var(--glass-border)", 
                 borderRadius: "12px",
-                padding: "14px 16px" 
+                padding: "14px 16px",
+                color: "var(--text-main)"
               }}
             />
           </div>
@@ -241,12 +244,12 @@ function AddExpenseModal({ show, onClose, onSuccess }) {
               onChange={handleExpenseChange}
               required
               style={{ 
-                background: "#1e293b", 
-                border: "1px solid rgba(255,255,255,0.05)", 
+                background: "var(--input-bg)", 
+                border: "1px solid var(--glass-border)", 
                 borderRadius: "12px",
                 padding: "14px 16px",
-                color: "#fff",
-                colorScheme: "dark"
+                color: "var(--text-main)",
+                colorScheme: theme === "dark" ? "dark" : "light"
               }}
             />
           </div>

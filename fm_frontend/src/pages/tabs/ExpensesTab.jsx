@@ -11,6 +11,14 @@ function ExpensesTab() {
     end_date: "",
   });
 
+  // 📄 Pagination State
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({
+    count: 0,
+    total_pages: 1,
+    page_size: 10
+  });
+
   // 📡 Fetch categories for filter dropdown
   const fetchCategories = async () => {
     try {
@@ -23,19 +31,24 @@ function ExpensesTab() {
     }
   };
 
-  // 📡 Fetch expenses with filters
+  // 📡 Fetch expenses with filters and pagination
   const fetchExpenses = async () => {
     setLoading(true);
     try {
-      const params = {};
+      const params = { page }; // Include page parameter
       if (filters.category_id) params.category_id = filters.category_id;
       if (filters.start_date) params.start_date = filters.start_date;
       if (filters.end_date) params.end_date = filters.end_date;
 
       const data = await getExpenses(params);
-      if (data.status === "success") {
-        setExpenses(data.expenses);
-      }
+
+      // Update data handling for paginated response structure
+      setExpenses(data.results || []);
+      setPagination({
+        count: data.count || 0,
+        total_pages: data.total_pages || 1,
+        page_size: data.page_size || 10
+      });
     } catch (err) {
       console.error("Failed to fetch expenses:", err);
     } finally {
@@ -47,9 +60,15 @@ function ExpensesTab() {
     fetchCategories();
   }, []);
 
+  // Reset page to 1 whenever filters change
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  // Fetch expenses when page or filters change
   useEffect(() => {
     fetchExpenses();
-  }, [filters]);
+  }, [page, filters]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -62,16 +81,16 @@ function ExpensesTab() {
   return (
     <>
       {/* 📊 Filters Section */}
-      <div 
-        className="glass-card" 
-        style={{ 
-          padding: "24px", 
-          marginBottom: "32px", 
-          background: "rgba(255,255,255,0.02)",
-          maxWidth: "100%" 
+      <div
+        className="glass-card"
+        style={{
+          padding: "16px",
+          marginBottom: "16px",
+          background: "var(--glass-bg)",
+          boxShadow: "var(--shadow)"
         }}
       >
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "16px", alignItems: "flex-end" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px", alignItems: "flex-end" }}>
           <div className="form-group" style={{ margin: 0 }}>
             <label className="form-label">Category</label>
             <select
@@ -79,11 +98,11 @@ function ExpensesTab() {
               name="category_id"
               value={filters.category_id}
               onChange={handleFilterChange}
-              style={{ appearance: "none", cursor: "pointer", background: "rgba(255, 255, 255, 0.05)", color: "#fff" }}
+              style={{ appearance: "none", cursor: "pointer", background: "var(--input-bg)", color: "var(--text-main)" }}
             >
-              <option value="" style={{ background: "#1a1a1a" }}>All Categories</option>
+              <option value="" style={{ background: "var(--bg-dark)" }}>All Categories</option>
               {categories.map((cat) => (
-                <option key={cat.id} value={cat.id} style={{ background: "#1a1a1a" }}>{cat.name}</option>
+                <option key={cat.id} value={cat.id} style={{ background: "var(--bg-dark)" }}>{cat.name}</option>
               ))}
             </select>
           </div>
@@ -111,8 +130,8 @@ function ExpensesTab() {
           </div>
 
           <div style={{ display: "flex" }}>
-            <button 
-              className="social-btn" 
+            <button
+              className="social-btn"
               style={{ margin: 0, padding: "12px", width: "100%", height: "46px" }}
               onClick={resetFilters}
             >
@@ -123,7 +142,7 @@ function ExpensesTab() {
       </div>
 
       {/* 📊 Transactions Section */}
-      <div className="dashboard-grid" style={{ display: "grid", gap: "32px" }}>
+      <div className="dashboard-grid" style={{ display: "grid", gap: "20px" }}>
         <div className="history-section">
           <div
             style={{
@@ -137,7 +156,7 @@ function ExpensesTab() {
               style={{
                 fontSize: "20px",
                 fontWeight: "600",
-                color: "#fff",
+                color: "var(--text-main)",
               }}
             >
               Recent Transactions
@@ -162,8 +181,10 @@ function ExpensesTab() {
                   className="glass-card"
                   style={{
                     padding: "20px",
-                    background: "rgba(255,255,255,0.03)",
+                    background: "var(--glass-bg)",
                     margin: 0,
+                    width: "100%",
+                    boxShadow: "var(--shadow)"
                   }}
                 >
                   <div
@@ -179,7 +200,7 @@ function ExpensesTab() {
                           fontSize: "16px",
                           fontWeight: "600",
                           marginBottom: "4px",
-                          color: "#fff",
+                          color: "var(--text-main)",
                         }}
                       >
                         {exp.description}
@@ -230,8 +251,9 @@ function ExpensesTab() {
               style={{
                 textAlign: "center",
                 padding: "60px 0",
-                background: "rgba(255,255,255,0.02)",
+                background: "var(--glass-bg)",
                 borderStyle: "dashed",
+                boxShadow: "var(--shadow)"
               }}
             >
               <p className="auth-subtitle">
@@ -249,6 +271,60 @@ function ExpensesTab() {
             </div>
           )}
         </div>
+
+        {/* 📄 Pagination UI */}
+        {!loading && pagination.total_pages > 1 && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "20px",
+              padding: "0 4px"
+            }}
+          >
+            <button
+              className="social-btn"
+              onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+              disabled={page === 1}
+              style={{
+                margin: 0,
+                padding: "8px 16px",
+                opacity: page === 1 ? 0.5 : 1,
+                cursor: page === 1 ? "not-allowed" : "pointer",
+                minWidth: "100px",
+                height: "40px"
+              }}
+            >
+              Previous
+            </button>
+
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px" }}>
+              <span style={{ color: "var(--text-main)", fontSize: "14px", fontWeight: "600" }}>
+                Page {page} of {pagination.total_pages}
+              </span>
+              <span style={{ color: "var(--text-muted)", fontSize: "11px" }}>
+                Total {pagination.count} records
+              </span>
+            </div>
+
+            <button
+              className="social-btn"
+              onClick={() => setPage(prev => Math.min(prev + 1, pagination.total_pages))}
+              disabled={page === pagination.total_pages}
+              style={{
+                margin: 0,
+                padding: "8px 16px",
+                opacity: page === pagination.total_pages ? 0.5 : 1,
+                cursor: page === pagination.total_pages ? "not-allowed" : "pointer",
+                minWidth: "100px",
+                height: "40px"
+              }}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

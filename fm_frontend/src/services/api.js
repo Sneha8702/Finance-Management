@@ -99,6 +99,12 @@ export const addExpense = async (data) => {
   return response.data;
 };
 
+// ---------------- ADD INCOME ----------------
+export const addIncome = async (data) => {
+  const response = await API.post("/add-income/", data);
+  return response.data;
+};
+
 // ---------------- GET CATEGORIES ----------------
 export const getCategories = async () => {
   const response = await API.get("/categories/");
@@ -120,6 +126,12 @@ export const getUserDetails = async () => {
 // ---------------- GET EXPENSE OVERVIEW ----------------
 export const getExpenseOverview = async () => {
   const response = await API.get("/expense-overview/");
+  return response.data;
+};
+
+// ---------------- GET ANALYTICS ----------------
+export const getAnalytics = async (params = {}) => {
+  const response = await API.get("/analytics/", { params });
   return response.data;
 };
 

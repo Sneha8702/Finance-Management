@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logoutUser, getUserDetails } from "../services/api";
-import AddExpenseModal from "../components/AddExpenseModal";
+import AddTransactionModal from "../components/AddTransactionModal";
 import MobileLayout from "../components/layout/MobileLayout";
 
 // Tab Imports
@@ -14,7 +14,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [username, setUsername] = useState("");
-  const [activeTab, setActiveTab] = useState("expenses");
+  const [activeTab, setActiveTab] = useState("home");
 
   // 🚪 Logout
   const handleLogout = async () => {
@@ -46,63 +46,60 @@ function Dashboard() {
   }, [navigate]);
 
   const [refreshKey, setRefreshKey] = useState(0);
+  const [statsType, setStatsType] = useState("expense");
 
   // 📑 Render Active Tab
   const renderTabContent = () => {
     switch (activeTab) {
       case "home":
-        return <HomeTab username={username} />;
+        return (
+          <HomeTab
+            username={username}
+            onTabChange={(tab, type) => {
+              if (type) setStatsType(type);
+              setActiveTab(tab);
+            }}
+            key={`home-${refreshKey}`}
+          />
+        );
       case "stats":
-        return <StatsTab />;
+        return (
+          <StatsTab
+            initialType={statsType}
+            key={`stats-${refreshKey}-${statsType}`}
+          />
+        );
       case "expenses":
-        return <ExpensesTab key={refreshKey} />;
+        return <ExpensesTab key={`exp-${refreshKey}`} />;
       case "profile":
         return <ProfileTab username={username} />;
       default:
-        return <ExpensesTab key={refreshKey} />;
+        return <HomeTab username={username} />;
     }
   };
 
   return (
-    <MobileLayout 
-      activeTab={activeTab} 
-      onTabChange={setActiveTab} 
+    <MobileLayout
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
       onAddClick={() => setShowModal(true)}
+      onLogout={handleLogout}
+      username={username}
     >
-      {/* 🔷 Global Dashboard Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "40px",
-          flexWrap: "wrap",
-          gap: "20px",
-        }}
-      >
-        <div>
-          <h2
-            className="auth-title"
-            style={{ textAlign: "left", marginBottom: "4px" }}
-          >
-            Welcome back,{" "}
-            <span style={{ color: "var(--secondary)" }}>
-              {username}
-            </span>
-            !
-          </h2>
-          <p className="auth-subtitle" style={{ textAlign: "left" }}>
-            Here is your latest spending analysis.
-          </p>
-        </div>
-
-        <button
-          className="social-btn"
-          style={{ padding: "12px 24px" }}
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
+      {/* 🔷 Streamlined Hero Section */}
+      <div style={{ marginBottom: "32px", animation: "slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+        <h1 style={{
+          fontSize: "32px",
+          fontWeight: "800",
+          color: "var(--text-main)",
+          marginBottom: "8px",
+          letterSpacing: "-1px"
+        }}>
+          Dashboard <span className="text-gradient">Overview</span>
+        </h1>
+        <p style={{ color: "var(--text-muted)", fontSize: "16px" }}>
+          Track, analyze and optimize your spending habits.
+        </p>
       </div>
 
       {/* 📑 Dynamic Tab Content */}
@@ -111,7 +108,7 @@ function Dashboard() {
       </div>
 
       {/* 🪟 Reusable Modal */}
-      <AddExpenseModal
+      <AddTransactionModal
         show={showModal}
         onClose={() => setShowModal(false)}
         onSuccess={() => {

@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 function Calculator({ initialValue, onApply, onClose }) {
+  const { theme } = useTheme();
   const [display, setDisplay] = useState(initialValue?.toString() || "");
   const [equation, setEquation] = useState("");
 
@@ -42,24 +44,25 @@ function Calculator({ initialValue, onApply, onClose }) {
 
   return (
     <div style={{
-      background: "#0f172a",
+      background: "var(--bg-dark)",
       borderRadius: "20px",
       padding: "20px",
       width: "100%",
       maxWidth: "300px",
-      boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
-      border: "1px solid rgba(255,255,255,0.1)",
+      boxShadow: "var(--shadow)",
+      border: "1px solid var(--glass-border)",
     }}>
       <div style={{
-        background: "rgba(0,0,0,0.3)",
+        background: "var(--glass-bg)",
         padding: "15px",
         borderRadius: "12px",
         marginBottom: "20px",
         textAlign: "right",
-        minHeight: "72px"
+        minHeight: "72px",
+        border: "1px solid var(--glass-border)"
       }}>
         <div style={{ color: "var(--text-muted)", fontSize: "12px", height: "18px" }}>{equation}</div>
-        <div style={{ color: "#fff", fontSize: "28px", fontWeight: "700" }}>{display || "0"}</div>
+        <div style={{ color: "var(--text-main)", fontSize: "28px", fontWeight: "700" }}>{display || "0"}</div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "10px" }}>
@@ -74,16 +77,16 @@ function Calculator({ initialValue, onApply, onClose }) {
             style={{
               padding: "15px",
               borderRadius: "12px",
-              background: ["+", "-", "*", "/", "C"].includes(btn) ? "rgba(139, 92, 246, 0.1)" : "rgba(255,255,255,0.05)",
-              color: ["+", "-", "*", "/", "C"].includes(btn) ? "var(--primary)" : "#fff",
+              background: ["+", "-", "*", "/", "C"].includes(btn) ? "rgba(139, 92, 246, 0.1)" : "var(--glass-bg)",
+              color: ["+", "-", "*", "/", "C"].includes(btn) ? "var(--primary)" : "var(--text-main)",
               border: "none",
               fontSize: "18px",
               fontWeight: "600",
               cursor: "pointer",
               transition: "all 0.2s"
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
-            onMouseLeave={(e) => e.currentTarget.style.background = ["+", "-", "*", "/", "C"].includes(btn) ? "rgba(139, 92, 246, 0.1)" : "rgba(255,255,255,0.05)"}
+            onMouseEnter={(e) => e.currentTarget.style.background = "var(--primary)"}
+            onMouseLeave={(e) => e.currentTarget.style.background = ["+", "-", "*", "/", "C"].includes(btn) ? "rgba(139, 92, 246, 0.1)" : "var(--glass-bg)"}
           >
             {btn}
           </button>
