@@ -30,6 +30,14 @@ class Income(models.Model):
     source = models.CharField(max_length=100)
     date = models.DateField()
 
+    is_recurring = models.BooleanField(default=False)
+    frequency = models.CharField(
+        max_length=20,
+        choices=[('monthly', 'Monthly')],
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return f"{self.user.username} - {self.source} - {self.amount}"
 

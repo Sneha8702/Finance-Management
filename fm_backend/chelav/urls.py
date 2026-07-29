@@ -6,6 +6,7 @@ from chelav.views.listing.category_list import CategoryListView
 from chelav.views.user_details.views import CurrentUserView
 from chelav.views.home.views import ExpenseOverView
 from chelav.views.add_income.views import AddIncomeView
+from chelav.views.analysis.expense_analysis.views import UserExpenseAnalyticsView
 
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
@@ -21,4 +22,5 @@ urlpatterns = [
     path('categories/', CategoryListView.as_view(), name='categories-list'),
     path('expense-overview/', ExpenseOverView.as_view(), name='expense-overview'),
     path('add-income/', AddIncomeView.as_view(), name='add-income'),
+    path('analytics/', UserExpenseAnalyticsView.as_view(), name='expense-analytics'),
 ]
