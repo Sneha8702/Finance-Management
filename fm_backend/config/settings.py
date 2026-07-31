@@ -45,7 +45,7 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5174",
+#     "http://localhost:5173",
 # ]
 
 # URLs & Templates

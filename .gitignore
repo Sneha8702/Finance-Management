@@ -1,14 +1,102 @@
-# Backend
-fm_backend/venv/
-fm_backend/__pycache__/
-fm_backend/*.pyc
-fm_backend/db.sqlite3
-fm_backend/.env
+# ============================================================
+# Python / Django
+# ============================================================
 
-# Frontend
-fm_frontend/node_modules/
-fm_frontend/dist/
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+fm_backend/venv/
+
+# Environment variables
+.env
+*.env
+fm_backend/.env
 fm_frontend/.env
 
-# General
-.env
+# Django database
+db.sqlite3
+db.sqlite3-journal
+fm_backend/db.sqlite3
+
+# Django collected static files
+staticfiles/
+
+# Media uploads (optional)
+media/
+
+# Logs
+*.log
+
+# ============================================================
+# React / Node.js / Vite
+# ============================================================
+
+node_modules/
+dist/
+build/
+
+# npm / yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================================================
+# VS Code
+# ============================================================
+
+.vscode/
+
+# ============================================================
+# JetBrains IDEs
+# ============================================================
+
+.idea/
+
+# ============================================================
+# macOS
+# ============================================================
+
+.DS_Store
+
+# ============================================================
+# Windows
+# ============================================================
+
+Thumbs.db
+Desktop.ini
+
+# ============================================================
+# Python Testing / Coverage
+# ============================================================
+
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ============================================================
+# MyPy
+# ============================================================
+
+.mypy_cache/
+
+# ============================================================
+# Ruff
+# ============================================================
+
+.ruff_cache/
+
+# ============================================================
+# Misc
+# ============================================================
+
+*.swp
+*.swo
